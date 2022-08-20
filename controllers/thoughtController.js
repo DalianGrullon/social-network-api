@@ -5,7 +5,6 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
-
       res.status(200).json(thoughts);
     } catch (error) {
       res.status(500).json(error);
@@ -19,7 +18,6 @@ module.exports = {
         res.status(404).json({ message: 'No thought with that ID exists' });
         return;
       }
-
       res.status(200).json(thought);
     } catch (error) {
       res.status(500).json(error);
@@ -38,7 +36,7 @@ module.exports = {
 
       const updatedUser = await User.findOneAndUpdate(
         { username: req.body.username },
-        { $addToSet: { thoughts: ObjectId(newThought._id) } },
+        { $push: { thoughts: ObjectId(newThought._id) } },
         { new: true }
       );
 
@@ -88,7 +86,7 @@ module.exports = {
     try {
       const updatedThought = await Thought.findOneAndUpdate(
         { _id: ObjectId(req.params.thoughtId) },
-        { $addToSet: { reactions: req.body } },
+        { $push: { reactions: req.body } },
         { new: true }
       )
 
